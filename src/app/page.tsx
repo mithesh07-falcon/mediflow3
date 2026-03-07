@@ -275,14 +275,7 @@ export default function MultiRoleLoginPage() {
                   </Button>
                 </form>
 
-                {selectedRole === 'admin' && (
-                  <div className="mt-6 p-4 bg-primary/5 rounded-2xl border border-dashed border-primary/20 flex items-start gap-3">
-                    <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                    <p className="text-[10px] text-muted-foreground leading-relaxed">
-                      <strong>Admin Support:</strong> Use <code>admin@mediflow.com</code> and <code>MediFlowAdmin2024!</code>
-                    </p>
-                  </div>
-                )}
+
 
                 {selectedRole === 'doctor' && (
                   <div className="mt-6 p-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl border border-dashed border-emerald-300 dark:border-emerald-700 flex items-start gap-3">

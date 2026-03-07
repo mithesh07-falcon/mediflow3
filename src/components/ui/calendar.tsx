@@ -13,65 +13,51 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>
 function Calendar({
   className,
   classNames,
-  showOutsideDays = false,
+  showOutsideDays = true,
   ...props
 }: CalendarProps) {
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div className={cn("p-10 bg-white dark:bg-zinc-900 rounded-[3rem] min-h-[480px] w-full flex items-center justify-center border-2 border-slate-100", className)}>
-        <div className="animate-pulse text-muted-foreground font-bold uppercase tracking-widest text-xs">Initializing Clinical Grid...</div>
-      </div>
-    );
-  }
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      fromDate={today}
-      disabled={{ before: today }}
-      className={cn("p-8 bg-white dark:bg-zinc-900 rounded-[3rem]", className)}
+      className={cn("p-6 bg-white dark:bg-zinc-950", className)}
       classNames={{
-        months: "flex flex-col space-y-6",
+        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-6",
-        caption: "flex flex-col items-start gap-4 mb-6",
-        caption_label: "text-3xl font-headline font-bold text-slate-900 dark:text-white order-last mt-1",
-        nav: "flex items-center gap-2",
-        nav_button: cn(
+        month_caption: "flex justify-center pt-1 relative items-center mb-4",
+        caption_label: "text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter",
+        nav: "flex items-center gap-1",
+        button_previous: cn(
           buttonVariants({ variant: "outline" }),
-          "h-10 w-10 bg-transparent p-0 opacity-100 hover:bg-primary/10 rounded-full transition-all flex items-center justify-center border-2 border-slate-100"
+          "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 rounded-lg"
         ),
-        nav_button_previous: "",
-        nav_button_next: "",
-        table: "w-full border-collapse",
-        // FORCING THE GRID: The following classes ensure the 7-column matrix format
-        head_row: "grid grid-cols-7 w-full mb-4",
-        head_cell: "text-slate-400 dark:text-slate-500 font-black text-[10px] text-center w-full uppercase tracking-[0.2em] h-8 flex items-center justify-center",
-        month_grid: "w-full",
-        week: "grid grid-cols-7 w-full gap-y-2 mt-1",
+        button_next: cn(
+          buttonVariants({ variant: "outline" }),
+          "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 rounded-lg"
+        ),
+        month_grid: "w-full border-collapse space-y-1",
+        weekdays: "grid grid-cols-7 mb-2",
+        weekday: "text-slate-400 dark:text-slate-500 font-bold text-[10px] text-center uppercase tracking-widest h-8 flex items-center justify-center",
+        weeks: "space-y-1",
+        week: "grid grid-cols-7 w-full",
         day: cn(
-          buttonVariants({ variant: "ghost" }),
-          "h-10 w-10 p-0 font-bold rounded-full text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-all duration-300 flex items-center justify-center mx-auto text-base"
+          "h-11 w-11 p-0 font-bold transition-all flex items-center justify-center rounded-xl text-sm relative",
+          "hover:bg-primary/10 hover:text-primary focus-within:relative focus-within:z-20"
         ),
-        day_button: "h-10 w-10 p-0 font-bold rounded-full transition-all flex items-center justify-center mx-auto",
-        selected: "!bg-primary !text-white hover:!bg-primary hover:!text-white focus:!bg-primary focus:!text-white font-black shadow-lg shadow-primary/30 rounded-full scale-110 !opacity-100 border-none",
-        today: "border-2 border-primary/40 text-primary font-black",
-        outside: "invisible", 
-        disabled: "text-muted-foreground/20 opacity-20 cursor-not-allowed pointer-events-none",
+        day_button: "h-full w-full flex items-center justify-center rounded-xl transition-all",
+        selected: "!bg-primary !text-white font-black shadow-lg shadow-primary/30 scale-105",
+        today: "after:content-[''] after:absolute after:bottom-2 after:h-1 after:w-1 after:rounded-full after:bg-primary font-black text-primary",
+        outside: "text-muted-foreground/30 opacity-50",
+        disabled: "text-muted-foreground/10 opacity-10 cursor-not-allowed",
         hidden: "invisible",
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-5 w-5" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-5 w-5" />,
+        Chevron: ({ ...props }) => {
+          if (props.orientation === 'left') {
+            return <ChevronLeft className="h-4 w-4" />;
+          }
+          return <ChevronRight className="h-4 w-4" />;
+        },
       }}
       {...props}
     />

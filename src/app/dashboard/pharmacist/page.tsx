@@ -304,7 +304,7 @@ export default function PharmacistDashboard() {
                   </div>
                   {activeOrder && (
                     <Badge className="h-10 px-6 rounded-full bg-green-100 text-green-800 text-sm font-black uppercase border-none">
-                      <Check className="h-4 w-4 mr-2" /> Verified
+                      <CheckCircle2 className="h-4 w-4 mr-2" /> Verified
                     </Badge>
                   )}
                 </div>

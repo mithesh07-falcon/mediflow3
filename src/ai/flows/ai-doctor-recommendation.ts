@@ -7,8 +7,8 @@
  * - AIDoctorRecommendationOutput - The return type for the aiDoctorRecommendation function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 
 const AIDoctorRecommendationInputSchema = z.object({
   symptoms: z.string().describe('A detailed description of the patient\'s symptoms.'),
@@ -27,10 +27,21 @@ export async function aiDoctorRecommendation(input: AIDoctorRecommendationInput)
 
 const prompt = ai.definePrompt({
   name: 'aiDoctorRecommendationPrompt',
-  input: {schema: AIDoctorRecommendationInputSchema},
-  output: {schema: AIDoctorRecommendationOutputSchema},
-  prompt: `You are a helpful medical assistant. Based on the patient's symptoms, recommend the most appropriate specialist doctor.
-Explain the reason for your recommendation briefly.
+  input: { schema: AIDoctorRecommendationInputSchema },
+  output: { schema: AIDoctorRecommendationOutputSchema },
+  prompt: `You are a clinical triage assistant for MediFlow Hospital. 
+Analyze the symptoms provided and recommend the most appropriate specialist from the following list:
+- ENT (for ear, nose, throat, hearing, sinus issues)
+- Gastroenterology (for stomach, digestion, abdominal pain, gastric issues)
+- Neurology (for brain, nerves, headaches, dizziness, tremors)
+- Cardiology (for heart, chest pain, palpitations, blood pressure)
+- Ophthalmology (for eyes, vision, eye irritation)
+- Pediatrics (if the patient is a child or has childhood-specific issues)
+
+Rules:
+1. If the symptoms include "ear pain", "ear blockage", or "hearing issues", you MUST recommend ENT.
+2. If the symptoms include "stomach ache", "heartburn", or "gastric", you MUST recommend Gastroenterology.
+3. Be concise in your reason.
 
 Symptoms: {{{symptoms}}}`,
 });
@@ -42,7 +53,7 @@ const aiDoctorRecommendationFlow = ai.defineFlow(
     outputSchema: AIDoctorRecommendationOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    const { output } = await prompt(input);
     return output!;
   }
 );

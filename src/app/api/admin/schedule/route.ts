@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 // Simple persistent schedule storage in memory (shared with standard booking)
-let masterSchedules = {
+let masterSchedules: Record<string, string[]> = {
     "dr.smith.neuro@mediflow.com_2024-03-07": ["09:00 AM", "09:30 AM", "10:00 AM"],
     "dr.jones.gastro@mediflow.com_2024-03-07": ["11:00 AM", "11:30 AM", "12:00 PM"]
 };

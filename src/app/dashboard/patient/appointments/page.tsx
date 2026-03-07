@@ -103,19 +103,21 @@ export default function AppointmentPage() {
     const dateStr = date.toISOString().split('T')[0];
     const displayDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-    setTimeout(() => {
+    // Optimization: reduced delay to 50ms for hyper-responsive feel
+    const timer = setTimeout(() => {
       // MASTER SLOT LOGIC: Fetch Admin-configured slots for this doctor/date
       const allMaster = JSON.parse(localStorage.getItem("mediflow_master_schedules") || "{}");
-      // MOCK: If no slots configured, provide some defaults for demo
       const configSlots = allMaster[`${selectedDoctor}_${dateStr}`];
       setMasterSlots(configSlots || ["09:00 AM", "10:00 AM", "11:00 AM", "02:00 PM", "03:00 PM", "04:00 PM"]);
 
-      // COLLISION CHECK: Fetch existing appointments to see what's already taken
+      // COLLISION CHECK: Fetch existing appointments
       const allAppts = JSON.parse(localStorage.getItem("mediflow_appointments") || "[]");
       setBookedSlots(allAppts.filter((a: any) => a.doctorEmail === selectedDoctor && a.date === displayDate).map((a: any) => a.time));
 
       setCheckingSlots(false);
-    }, 200);
+    }, 50);
+
+    return () => clearTimeout(timer);
   }, [selectedDoctor, date]);
 
   const filteredDoctors = useMemo(() => filterSpec === "all" ? onboardedDoctors : onboardedDoctors.filter(d => d.specialization === filterSpec), [onboardedDoctors, filterSpec]);
